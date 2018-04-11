@@ -15,15 +15,18 @@ dependencies:
 
 test:
   override:
-    - make RM= lint
-    - make RM= test
-    - make RM=
-    - make RM= configs-integration-test
-
+    - make
 deployment:
   push:
-    branch: master
+    branch: staging
     commands:
       - docker login -e "$DOCKER_REGISTRY_EMAIL" -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD"
       - if [ -n "$QUAY_PASSWORD" ]; then docker login -e '.' -u "$QUAY_USER" -p "$QUAY_PASSWORD" quay.io; fi
       - ./push-images $NOQUAY
+  pushFeature:
+    branch: alerts
+    commands:
+      - docker login -e "$DOCKER_REGISTRY_EMAIL" -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD"
+      - ./push-images $NOQUAY
+
+
