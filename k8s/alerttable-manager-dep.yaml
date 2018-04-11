@@ -1,0 +1,25 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: alerttable-manager
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: alerttable-manager
+    spec:
+      containers:
+      - name: table-manager
+        image: mulebot/cortex-table-manager
+        imagePullPolicy: Always
+        args:
+        - -server.http-listen-port=80
+        - -dynamodb.original-table-name=cortexalerts
+        - -dynamodb.url=dynamodb://user:pass@172.17.0.7:8000
+        - -dynamodb.periodic-table.prefix=cortexalerts_weekly_
+        - -dynamodb.periodic-table.start=2017-01-06
+        - -dynamodb.chunk-table.from=2017-04-17
+        ports:
+        - containerPort: 80

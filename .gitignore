@@ -1,0 +1,13 @@
+cmd/alertmanager/alertmanager
+cmd/configs/configs
+cmd/distributor/distributor
+cmd/ingester/ingester
+cmd/querier/querier
+cmd/ruler/ruler
+cmd/table-manager/table-manager
+cmd/lite/lite
+.uptodate
+.pkg
+pkg/ingester/client/cortex.pb.go
+pkg/ring/ring.pb.go
+bazel-*
