@@ -4,7 +4,7 @@
 # Boiler plate for bulding Docker containers.
 # All this must go at top of file I'm afraid.
 #IMAGE_PREFIX ?= quay.io/weaveworks/cortex-
-IMAGE_PREFIX ?= mulebot/cortex-
+IMAGE_PREFIX ?= pradeepkumar95/cortex-
 IMAGE_TAG := $(shell ./tools/image-tag)
 UPTODATE := .uptodate
 
@@ -134,3 +134,4 @@ bazel: $(PROTOS_GO)
 
 bazel-test: $(PROTOS_GO)
 	bazel test //pkg/...
+

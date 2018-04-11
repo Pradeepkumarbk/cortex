@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
+set -ex
 set -o errexit
 set -o nounset
 set -o pipefail
 
-IMAGES=$(make images)
+IMAGES="${IMAGE_PREFIX}alertingest ${IMAGE_PREFIX}alertquery ${IMAGE_PREFIX}alertdist ${IMAGE_PREFIX}table-manager ${IMAGE_PREFIX}alertmanager"
 IMAGE_TAG=$(./tools/image-tag)
 QUAY_PREFIX=quay.io/
 NO_QUAY=
-
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 usage() {
     echo "$0 (-noquay)"
     exit 2
@@ -38,8 +39,11 @@ push_image() {
 
     # remove the quey prefix and push to docker hub
     docker_hub_image=${image#$QUAY_PREFIX}
-    docker tag ${image}:${IMAGE_TAG} ${docker_hub_image}:${IMAGE_TAG}
-
+    # Push to openebs DockerHub repo when branch = staging
+    if [[ "${BRANCH_NAME}" == "staging" ]]; then
+            docker tag "${image}:${IMAGE_TAG}" "${docker_hub_image}:latest"
+            docker push "${docker_hub_image}:latest"
+    fi
     echo "Pushing ${docker_hub_image}:${IMAGE_TAG}"
     docker push ${docker_hub_image}:${IMAGE_TAG}
 }
@@ -52,3 +56,4 @@ for image in ${IMAGES}; do
 done
 
 wait
+
